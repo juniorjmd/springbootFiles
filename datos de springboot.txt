@@ -1,0 +1,48 @@
+
+spring.datasource.url=jdbc:mysql://localhost:3306/db_springboot
+spring.datasource.username=userdb
+spring.datasource.password=sasa
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=create
+
+
+
+spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
+
+
+
+spring web web
+spring data jpa
+spring devtools
+mysql driver sql
+
+para validar los campos de un modelo primero se debe agregar en el pom.xml el spring-boot-starter-validation
+
+<dependency>
+	<groupId>ord.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+
+luego debes colocar en el modelo en los campos a validar que validacion necesita, puede ser el tamaño o que no este en blanco 
+
+@notBlank o @notEmpty para string tambien @size , por ejemplo
+o @notNull para algun objeto por ejemplo Date() o 
+@min para numerico
+
+luego debes colocar en el controlador en donde vas a utilizar el modelo el @Valid por ejemplo 
+
+@valid @requestBody Product product 
+
+
+en el controlador al lado derecho colocamos la variable bindingResult result en ella se guardan todos los errores recibidos en el request
+
+
+  private ResponseEntity<?> Validation(BindingResult result) {
+    Map <String , String> error = new HashMap<>();
+    result.getFieldErrors().forEach(err -> {
+        error.put( err.getField(), "el campo " + err.getField() + " " + err.getDefaultMessage());
+    } );
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+}
